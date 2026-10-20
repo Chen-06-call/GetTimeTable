@@ -14,6 +14,7 @@ App 内置背景由 `app/src/main/java/com/local/weekday/BackdropView.java` 使�
 | 7 | 夏日 | 新增季节 | `#A9DCE5` → `#EDF7D9` |
 | 8 | 秋色 | 新增季节 | `#D4935F` → `#F2DFB5` |
 | 9 | 冬霜 | 新增季节 | `#B9D3E5` → `#F0F6FB` |
+| 10 | 暮色湖畔 | 新增 | `#51496F` → `#F0B277` |
 
 记录图：
 
@@ -27,3 +28,4 @@ App 内置背景由 `app/src/main/java/com/local/weekday/BackdropView.java` 使�
 - [夏日](08-summer.svg)
 - [秋色](09-autumn.svg)
 - [冬霜](10-winter.svg)
+- [暮色湖畔](11-dusk-lake.svg)

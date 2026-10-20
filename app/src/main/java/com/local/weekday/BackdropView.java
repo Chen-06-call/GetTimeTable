@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.*;
 import java.io.*;
 
-/** Ten local procedural backgrounds, including four seasonal scenes. */
+/** Eleven local procedural backgrounds, including four seasonal scenes. */
 public class BackdropView extends View {
   final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
   Bitmap image;
@@ -59,9 +59,10 @@ public class BackdropView extends View {
       {0xffd8ead2, 0xffffe9df},
       {0xffa9dce5, 0xffedf7d9},
       {0xffd4935f, 0xfff2dfb5},
-      {0xffb9d3e5, 0xfff0f6fb}
+      {0xffb9d3e5, 0xfff0f6fb},
+      {0xff51496f, 0xfff0b277}
     };
-    int[] palette = colors[Math.max(0, Math.min(9, type))];
+    int[] palette = colors[Math.max(0, Math.min(10, type))];
     p.setShader(new LinearGradient(0, 0, 0, 640, palette, null, Shader.TileMode.CLAMP));
     c.drawRect(0, 0, 360, 640, p);
     p.setShader(null);
@@ -131,7 +132,7 @@ public class BackdropView extends View {
         c.restore();
       }
       hill(c, p, 0x457f5b45, 535, 72);
-    } else {
+    } else if (type == 9) {
       p.setColor(0xa8ffffff);
       for (int i = 0; i < 36; i++) {
         float x = (i * 71) % 360, y = 90 + (i * 47) % 400;
@@ -139,6 +140,25 @@ public class BackdropView extends View {
         c.drawLine(x, y - 5, x, y + 5, p);
       }
       hill(c, p, 0x4c6f8fa3, 535, 92);
+    } else {
+      // A calm dusk lake scene keeps the upper area quiet behind course cards.
+      p.setColor(0x99ffd69b);
+      c.drawCircle(268, 176, 40, p);
+      hill(c, p, 0x55403462, 375, 72);
+      hill(c, p, 0x554c496f, 440, 54);
+      p.setColor(0x3dfff0c5);
+      for (int i = 0; i < 12; i++) {
+        float y = 455 + i * 13;
+        float width = 26 + (i % 4) * 12;
+        float x = 22 + (i * 53) % 290;
+        c.drawRoundRect(x, y, x + width, y + 2, 2, 2, p);
+      }
+      p.setColor(0x6650344d);
+      p.setStrokeWidth(3);
+      for (int i = 0; i < 8; i++) {
+        float x = 18 + i * 47;
+        c.drawLine(x, 640, x + (i % 2 == 0 ? 8 : -6), 535 - (i % 3) * 13, p);
+      }
     }
     return bitmap;
   }

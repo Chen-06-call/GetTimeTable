@@ -31,7 +31,26 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Gradle failed with exit code $LASTEXITCODE." }
     New-Item -ItemType Directory -Path 'dist' -Force | Out-Null
     Copy-Item -LiteralPath 'app\build\outputs\apk\release\app-release.apk' -Destination 'dist\weekday-release.apk' -Force
+    $versionText = Get-Content -LiteralPath 'app\build.gradle' -Raw
+    $versionName = ([regex]::Match($versionText, "versionName\s+'([^']+)'")).Groups[1].Value
+    $versionCode = [int]([regex]::Match($versionText, 'versionCode\s+(\d+)').Groups[1].Value)
+    $apkHash = (Get-FileHash -LiteralPath 'dist\weekday-release.apk' -Algorithm SHA256).Hash
+    [ordered]@{
+        appId = 'com.local.weekday'
+        name = '一周 · Weekday'
+        versionName = $versionName
+        versionCode = $versionCode
+        releaseChannel = 'stable'
+        minSdk = 26
+        targetSdk = 35
+        apkFile = 'weekday-release.apk'
+        downloadUrl = "https://github.com/Chen-06-call/GetTimeTable/releases/download/v$versionName/weekday-release.apk"
+        sha256 = $apkHash
+        releaseDate = (Get-Date -Format 'yyyy-MM-dd')
+        releaseNotes = @('新增暮色湖畔内置背景', '保留固定 release 签名并生成可校验的 APK')
+    } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'dist\version.json' -Encoding utf8
     Write-Output 'APK: dist\weekday-release.apk'
+    Write-Output 'Version manifest: dist\version.json'
 } finally {
     Pop-Location
 }

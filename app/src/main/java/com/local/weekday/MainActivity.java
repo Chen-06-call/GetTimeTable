@@ -1137,7 +1137,7 @@ public class MainActivity extends Activity {
     row(data, "学校与教务网站", "湖北经济学院 · 登录后读取课表", v -> schoolsDialog());
     row(data, "备份与恢复", "导出本机数据 / 导入快照", v -> backupDialog());
     LinearLayout looks = section(root, "外观");
-    row(looks, "背景与主题", "10 款内置背景 · 跟随系统/浅色/深色 · 可选相册", v -> appearanceDialog());
+    row(looks, "背景与主题", "11 款内置背景 · 跟随系统/浅色/深色 · 可选相册", v -> appearanceDialog());
     ScrollView sv = new ScrollView(this);
     sv.addView(root);
     content.addView(sv);
@@ -1995,7 +1995,7 @@ public class MainActivity extends Activity {
   void appearanceDialog() {
     LinearLayout root = form();
     String[] names = {
-      "晨光", "晴空", "森林", "星夜", "山岚", "纸页", "春日", "夏日", "秋色", "冬霜",
+      "晨光", "晴空", "森林", "星夜", "山岚", "纸页", "春日", "夏日", "秋色", "冬霜", "暮色湖畔",
       "自定义背景（先从相册选择）"
     };
     Spinner background = new Spinner(this);
@@ -2003,8 +2003,8 @@ public class MainActivity extends Activity {
         new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, names));
     background.setSelection(
         repo.prefs.getBoolean("customBackground", false)
-            ? 10
-            : Math.min(9, repo.prefs.getInt("background", 5)));
+            ? 11
+            : Math.min(10, repo.prefs.getInt("background", 5)));
     root.addView(tv("内置背景", 13, muted));
     root.addView(background);
     String[] themeNames = {"跟随系统", "浅色主题", "深色主题"};
@@ -2031,14 +2031,14 @@ public class MainActivity extends Activity {
             "背景与外观",
             root,
             () -> {
-              if (background.getSelectedItemPosition() == 10
+              if (background.getSelectedItemPosition() == 11
                   && !new File(getFilesDir(), "background.jpg").isFile())
                 throw new Exception("请先从相册选择背景");
               int selectedTheme = theme.getSelectedItemPosition();
               repo.prefs
                   .edit()
-                  .putBoolean("customBackground", background.getSelectedItemPosition() == 10)
-                  .putInt("background", Math.min(9, background.getSelectedItemPosition()))
+                  .putBoolean("customBackground", background.getSelectedItemPosition() == 11)
+                  .putInt("background", Math.min(10, background.getSelectedItemPosition()))
                   .putInt("brightness", bright.getProgress())
                   .putInt("blur", blur.getProgress())
                   .putInt("veil", veil.getProgress())
