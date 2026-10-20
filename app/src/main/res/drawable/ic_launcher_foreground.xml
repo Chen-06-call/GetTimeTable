@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive foreground: week card inside the 72dp safe zone of the 108dp viewport. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FFF6F7F2"
+        android:pathData="M30,34h48a4,4 0 0,1 4,4v38a4,4 0 0,1 -4,4h-48a4,4 0 0,1 -4,-4v-38a4,4 0 0,1 4,-4z" />
+    <path android:fillColor="#FF386C56"
+        android:pathData="M26,44h56v4h-56z" />
+    <path android:fillColor="#FFF6F7F2"
+        android:pathData="M40,24h5v14h-5zM63,24h5v14h-5z" />
+    <path android:fillColor="#FFB9D9C1"
+        android:pathData="M33,54h12v9h-12zM48,54h12v9h-12zM63,54h12v9h-12zM33,67h12v7h-12zM48,67h12v7h-12z" />
+    <path android:fillColor="#FF386C56"
+        android:pathData="M63,67h12v7h-12z" />
+</vector>

@@ -1,0 +1,46 @@
+cat > .gitignore <<'EOF'
+.idea/
+build/
+.gradle/
+.m2/
+EOF
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+# Android project
+.gradle/
+.gradle-user/
+.gradle-local/
+.android-user/
+.tools/
+local.properties
+**/build/
+*.jks
+*.keystore

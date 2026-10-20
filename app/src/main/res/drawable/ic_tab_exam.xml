@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Exam clipboard with a check. Tinted at runtime. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FF233D32" android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M5.6,5.4h12.8v14.8h-12.8z" />
+    <path android:fillColor="#FF233D32"
+        android:pathData="M9.4,3.2h5.2v3.2h-5.2z" />
+    <path android:strokeColor="#FF233D32" android:strokeWidth="1.9"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M8.6,13.1l2.3,2.3l4.5,-4.9" />
+</vector>

@@ -1,0 +1,27 @@
+<resources>
+    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:colorAccent">@color/green_light</item>
+        <item name="android:colorControlActivated">@color/green_light</item>
+        <item name="android:colorControlHighlight">@color/divider_light</item>
+        <item name="android:textColorPrimary">@color/ink_light</item>
+        <item name="android:textColorSecondary">@color/muted_light</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/bg_light</item>
+        <item name="android:navigationBarColor">@color/bg_light</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/bg_light</item>
+    </style>
+    <style name="AppThemeDark" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:colorAccent">@color/green_dark</item>
+        <item name="android:colorControlActivated">@color/green_dark</item>
+        <item name="android:colorControlHighlight">@color/divider_dark</item>
+        <item name="android:textColorPrimary">@color/ink_dark</item>
+        <item name="android:textColorSecondary">@color/muted_dark</item>
+        <item name="android:statusBarColor">@color/bg_dark</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+    </style>
+</resources>

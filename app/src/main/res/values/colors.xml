@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light -->
+    <color name="bg_light">#F6F7F2</color>
+    <color name="ink_light">#233D32</color>
+    <color name="muted_light">#6C7E72</color>
+    <color name="green_light">#386C56</color>
+    <color name="surface_light">#F2FEFFFB</color>
+    <color name="surface_soft_light">#4DFFFFFF</color>
+    <color name="divider_light">#1A3C5B49</color>
+    <color name="accent_soft_light">#FFE1EDDF</color>
+    <color name="nav_light">#EEF6F7F2</color>
+    <color name="on_accent_light">#FFFFFFFF</color>
+
+    <!-- Dark -->
+    <color name="bg_dark">#17231C</color>
+    <color name="ink_dark">#E5EEE5</color>
+    <color name="muted_dark">#A4B6A8</color>
+    <color name="green_dark">#9DCAAE</color>
+    <color name="surface_dark">#D42C3E32</color>
+    <color name="surface_soft_dark">#143F5F4E</color>
+    <color name="divider_dark">#2A9DCAAE</color>
+    <color name="accent_soft_dark">#FF2E4439</color>
+    <color name="nav_dark">#E61C2A22</color>
+    <color name="on_accent_dark">#FF17231C</color>
+
+    <!-- Exam block -->
+    <color name="exam_fill">#E1F4CD91</color>
+    <color name="exam_stroke">#FFB9783C</color>
+    <color name="exam_ink">#FF633B25</color>
+</resources>

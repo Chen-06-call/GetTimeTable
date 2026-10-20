@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="gutter">18dp</dimen>
+    <dimen name="header_top">9dp</dimen>
+    <dimen name="header_bottom">5dp</dimen>
+    <dimen name="nav_height">66dp</dimen>
+</resources>

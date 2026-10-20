@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <com.local.weekday.BackdropView android:id="@+id/backdrop"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <!-- Header: brand eyebrow, page title, primary add action. -->
+        <LinearLayout
+            android:paddingHorizontal="@dimen/gutter"
+            android:paddingTop="@dimen/header_top"
+            android:paddingBottom="@dimen/header_bottom"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:baselineAligned="false"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <LinearLayout android:orientation="vertical"
+                android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView android:id="@+id/eyebrow"
+                    android:text="@string/brand"
+                    android:textSize="10sp"
+                    android:textColor="@color/muted_light"
+                    android:letterSpacing="0.08"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/title"
+                    android:text="@string/home_title"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ink_light"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <ImageView android:id="@+id/home_more"
+                android:visibility="gone"
+                android:contentDescription="更多课表选项"
+                android:src="@drawable/ic_menu"
+                android:padding="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_width="36dp" android:layout_height="36dp" />
+
+            <Button android:id="@+id/add"
+                android:text="@string/add_course"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                android:drawableStart="@drawable/ic_add"
+                android:drawablePadding="5dp"
+                android:paddingHorizontal="15dp"
+                android:minWidth="0dp" android:minHeight="0dp"
+                android:layout_width="wrap_content" android:layout_height="36dp" />
+        </LinearLayout>
+
+        <FrameLayout android:id="@+id/content"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View android:id="@+id/nav_divider"
+            android:layout_width="match_parent" android:layout_height="1dp" />
+
+        <LinearLayout android:id="@+id/navigation"
+            android:orientation="horizontal"
+            android:paddingTop="7dp" android:paddingBottom="6dp"
+            android:paddingHorizontal="6dp"
+            android:baselineAligned="false"
+            android:layout_width="match_parent" android:layout_height="@dimen/nav_height" />
+    </LinearLayout>
+</FrameLayout>
