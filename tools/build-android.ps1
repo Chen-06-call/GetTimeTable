@@ -21,7 +21,7 @@ try {
     $env:ANDROID_HOME = $AndroidSdk
     $env:ANDROID_USER_HOME = (New-Item -ItemType Directory -Path '.android-user' -Force).FullName
     $env:GRADLE_USER_HOME = (New-Item -ItemType Directory -Path '.gradle-user' -Force).FullName
-    $tasks = @('assembleDebug', 'lintDebug')
+    $tasks = @('assembleRelease', 'lintRelease')
     if (!$SkipTests) { $tasks += 'testDebugUnitTest' }
     if (Test-Path -LiteralPath '.tools\gradle-9.3.1\bin\gradle.bat') {
         & '.tools\gradle-9.3.1\bin\gradle.bat' @tasks --no-daemon
@@ -30,8 +30,8 @@ try {
     }
     if ($LASTEXITCODE -ne 0) { throw "Gradle failed with exit code $LASTEXITCODE." }
     New-Item -ItemType Directory -Path 'dist' -Force | Out-Null
-    Copy-Item -LiteralPath 'app\build\outputs\apk\debug\app-debug.apk' -Destination 'dist\weekday-debug.apk' -Force
-    Write-Output 'APK: dist\weekday-debug.apk'
+    Copy-Item -LiteralPath 'app\build\outputs\apk\release\app-release.apk' -Destination 'dist\weekday-release.apk' -Force
+    Write-Output 'APK: dist\weekday-release.apk'
 } finally {
     Pop-Location
 }

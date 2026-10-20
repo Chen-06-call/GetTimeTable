@@ -4,7 +4,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 
 ## 安装与第一次使用
 
-当前版本 **1.3.3**，构建后的安装文件为 [dist/weekday-debug.apk](dist/weekday-debug.apk)。这是供自用安装的调试签名 APK。
+当前版本 **1.3.3**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)。这是使用固定 release 签名的自用 APK。
 
 1. 在手机上打开 APK，按系统提示允许该文件来源安装。
 2. 打开「设置 → 当前课表 → 编辑当前课表」，填写课表名称、开学日期及 1–20 周的总周数。界面会显示开学日期所在周的周一，供确认。
@@ -82,12 +82,14 @@ PowerShell 一键构建：
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build-android.ps1
 ```
 
-脚本执行 APK 打包、Android Lint 和全部单元测试，并复制产物到 `dist/weekday-debug.apk`。首次执行需要联网下载 Gradle 与依赖；Wrapper 使用腾讯 Gradle 镜像，校验分发包 SHA-256。测试运行库使用 Maven 镜像下载，可在 `app/build.gradle` 中调整 Robolectric 下载地址。
+脚本执行 release APK 打包、Android Lint 和全部单元测试，并复制产物到 `dist/weekday-release.apk`。首次执行需要联网下载 Gradle 与依赖；Wrapper 使用腾讯 Gradle 镜像，校验分发包 SHA-256。测试运行库使用 Maven 镜像下载，可在 `app/build.gradle` 中调整 Robolectric 下载地址。
+
+Release 签名密钥保存在本机的 `.android-user/weekday-release.jks`，密码配置保存在被忽略的 `keystore.properties`，两者都不能上传到 GitHub。迁移开发环境或继续发布更新时必须同时备份这两个文件；丢失密钥后无法覆盖更新已安装的 release APK。当前 debug APK 与 release APK 签名不同，首次切换需要卸载旧 debug APK，之后 release 更新可直接覆盖安装。
 
 标准命令也可使用：
 
 ```powershell
-.\gradlew.bat assembleDebug lintDebug testDebugUnitTest
+.\gradlew.bat assembleRelease lintRelease testDebugUnitTest
 ```
 
 本机 SDK 37 比 AGP 9.1 声明测试过的 36.1 新，构建可能显示版本提示。未隐藏该提示。项目未使用 Android 17 专用业务 API；支持设备以 `minSdk 26` 为准。

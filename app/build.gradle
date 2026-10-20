@@ -1,5 +1,11 @@
 plugins { id 'com.android.application' }
 
+def releaseSigningProperties = new java.util.Properties()
+def releaseSigningFile = rootProject.file('keystore.properties')
+if (releaseSigningFile.isFile()) {
+    releaseSigningFile.withInputStream { releaseSigningProperties.load(it) }
+}
+
 android {
     namespace 'com.local.weekday'
     compileSdk = 37
@@ -16,8 +22,21 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    signingConfigs {
+        release {
+            if (!releaseSigningProperties.isEmpty()) {
+                storeFile rootProject.file(releaseSigningProperties.getProperty('storeFile'))
+                storePassword releaseSigningProperties.getProperty('storePassword')
+                keyAlias releaseSigningProperties.getProperty('keyAlias')
+                keyPassword releaseSigningProperties.getProperty('keyPassword')
+            }
+        }
+    }
     buildTypes {
-        release { minifyEnabled false }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
     }
     lint { abortOnError true }
     testOptions {
