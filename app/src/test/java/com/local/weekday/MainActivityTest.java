@@ -108,6 +108,43 @@ public class MainActivityTest {
   }
 
   @Test
+  public void settingsTogglePreservesScrollPosition() throws Exception {
+    RuntimeEnvironment.getApplication().deleteDatabase("weekday.db");
+    ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).setup();
+    MainActivity activity = controller.get();
+    try {
+      await(() -> activity.repo.term != null && activity.selectedWeek >= 1);
+      activity.page = 2;
+      activity.refresh();
+      View decor = activity.getWindow().getDecorView();
+      decor.measure(
+          View.MeasureSpec.makeMeasureSpec(411, View.MeasureSpec.EXACTLY),
+          View.MeasureSpec.makeMeasureSpec(891, View.MeasureSpec.EXACTLY));
+      decor.layout(0, 0, 411, 891);
+      ScrollView beforeView = (ScrollView) activity.content.getChildAt(0);
+      assertTrue(beforeView.getChildAt(0).getMeasuredHeight() > beforeView.getMeasuredHeight());
+      beforeView.scrollTo(0, 160);
+      int before = beforeView.getScrollY();
+      assertTrue(before > 0);
+      View toggle = findDescription(decor, "显示教师开关");
+      assertNotNull(toggle);
+      assertTrue(toggle.getParent() instanceof View);
+      ((View) toggle.getParent()).performClick();
+      Shadows.shadowOf(Looper.getMainLooper()).idle();
+      ScrollView afterView = (ScrollView) activity.content.getChildAt(0);
+      afterView.measure(
+          View.MeasureSpec.makeMeasureSpec(411, View.MeasureSpec.EXACTLY),
+          View.MeasureSpec.makeMeasureSpec(891, View.MeasureSpec.EXACTLY));
+      afterView.layout(0, 0, 411, 891);
+      Shadows.shadowOf(Looper.getMainLooper()).idle();
+      assertEquals(before, afterView.getScrollY());
+    } finally {
+      controller.pause().stop().destroy();
+    }
+  }
+
+  @Test
   public void schoolImportOnlyAsksForDestinationAndHomeDropdownSwitchesCoursebooks()
       throws Exception {
     android.app.Application context = RuntimeEnvironment.getApplication();

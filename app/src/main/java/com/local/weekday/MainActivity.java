@@ -1052,6 +1052,10 @@ public class MainActivity extends Activity {
   }
 
   void showSettings() {
+    showSettings(0);
+  }
+
+  void showSettings(int restoreScrollY) {
     content.removeAllViews();
     LinearLayout root = vertical();
     root.setPadding(dp(18), dp(8), dp(18), dp(16));
@@ -1102,7 +1106,7 @@ public class MainActivity extends Activity {
         v -> {
           allMode = !allMode;
           repo.prefs.edit().putBoolean("allMode", allMode).apply();
-          showSettings();
+          showSettings(settingsScrollY());
         });
     row(
         display,
@@ -1116,7 +1120,7 @@ public class MainActivity extends Activity {
         repo.prefs.getInt("days", 7) == 7 ? "周一至周日" : "周一至周五",
         v -> {
           repo.prefs.edit().putInt("days", repo.prefs.getInt("days", 7) == 7 ? 5 : 7).apply();
-          showSettings();
+          showSettings(settingsScrollY());
         });
     row(
         display,
@@ -1125,7 +1129,7 @@ public class MainActivity extends Activity {
         repo.prefs.getBoolean("showTeacher", false),
         enabled -> {
           repo.prefs.edit().putBoolean("showTeacher", enabled).apply();
-          showSettings();
+          showSettings(settingsScrollY());
         });
     LinearLayout data = section(root, "作息与数据");
     row(
@@ -1141,6 +1145,14 @@ public class MainActivity extends Activity {
     ScrollView sv = new ScrollView(this);
     sv.addView(root);
     content.addView(sv);
+    if (restoreScrollY > 0) {
+      sv.post(() -> sv.scrollTo(0, restoreScrollY));
+    }
+  }
+
+  int settingsScrollY() {
+    View current = content.getChildCount() == 0 ? null : content.getChildAt(0);
+    return current instanceof ScrollView ? current.getScrollY() : 0;
   }
 
   /** Section heading plus the card that its rows are added to. */

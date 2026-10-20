@@ -2,9 +2,9 @@
 
 ## 自动检查
 
-本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，46 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.3`（versionCode 9）。
+本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，47 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.4`（versionCode 10）。
 
-最终 release APK SHA-256：`97F8FA30459437AA0607027E675FFEC2102BE08560D5A855F63170F3A99B200D`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
+最终 release APK SHA-256：`6BF977F51286E911A79AFAF33BFCF80C211B3442A0356BEF2E83B724981D1995`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
 
 课程文字更新：取消课程块固定行数和省略号限制，按列宽持续换行至块底部，保持课程块既有尺寸；字号在设置值基础上减小 1sp，最低 8sp。执行 `tools/build-android.ps1`，打包、Lint 和全部 46 个单元测试通过。尚未在手机上验证此次文字布局。
 

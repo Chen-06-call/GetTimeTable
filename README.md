@@ -4,7 +4,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 
 ## 安装与第一次使用
 
-当前版本 **1.3.3**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
+当前版本 **1.3.4**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
 
 1. 在手机上打开 APK，按系统提示允许该文件来源安装。
 2. 打开「设置 → 当前课表 → 编辑当前课表」，填写课表名称、开学日期及 1–20 周的总周数。界面会显示开学日期所在周的周一，供确认。
