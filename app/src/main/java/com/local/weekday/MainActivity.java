@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
   ZoomableScheduleLayout lastBuiltHomeBodyZoom;
   float weekSwipeDownX, weekSwipeDownY;
   boolean weekSwipeHorizontal, weekSwipeCommitted;
+  android.view.VelocityTracker weekSwipeVelocity;
   FrameLayout weekTransitionHost;
   View weekTransitionCurrent, weekTransitionNext;
   ZoomableScheduleLayout weekTransitionCurrentZoom;
@@ -408,12 +409,16 @@ public class MainActivity extends Activity {
     if (activeHomeBodyZoom != null && activeHomeBodyZoom.getZoom() > 1.001f) return false;
     int action = event.getActionMasked();
     if (action == MotionEvent.ACTION_DOWN) {
+      if (weekSwipeVelocity != null) weekSwipeVelocity.recycle();
+      weekSwipeVelocity = android.view.VelocityTracker.obtain();
+      weekSwipeVelocity.addMovement(event);
       weekSwipeDownX = event.getX();
       weekSwipeDownY = event.getY();
       weekSwipeHorizontal = false;
       weekSwipeCommitted = false;
       return false;
     }
+    if (weekSwipeVelocity != null) weekSwipeVelocity.addMovement(event);
     float dx = event.getX() - weekSwipeDownX;
     float dy = event.getY() - weekSwipeDownY;
     if (action == MotionEvent.ACTION_MOVE
@@ -431,8 +436,9 @@ public class MainActivity extends Activity {
       return true;
     }
     if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-      int threshold = dp(40);
-      boolean switchWeek = Math.abs(dx) >= threshold;
+      int threshold = weekSwipeThreshold();
+      float signedDistance = weekTransitionDirection == 1 ? -dx : dx;
+      boolean switchWeek = weekTransitionHost != null && signedDistance >= threshold / 2f;
       if (switchWeek && !weekSwipeCommitted && weekTransitionHost != null) {
         weekSwipeCommitted = true;
         selectedWeek = weekTransitionBaseWeek + weekTransitionDirection;
@@ -440,6 +446,10 @@ public class MainActivity extends Activity {
       } else if (weekTransitionHost != null) finishWeekTransition(false, 160);
       weekSwipeHorizontal = false;
       source.getParent().requestDisallowInterceptTouchEvent(false);
+      if (weekSwipeVelocity != null) {
+        weekSwipeVelocity.recycle();
+        weekSwipeVelocity = null;
+      }
       return true;
     }
     return true;
@@ -489,9 +499,30 @@ public class MainActivity extends Activity {
 
   void updateWeekTransition(float dx) {
     if (weekTransitionHost == null) return;
-    int width = weekTransitionWidth();
-    float progress = Math.max(0f, Math.min(1f, Math.abs(dx) / (float) dp(40)));
+    float progress = weekSwipeProgress(dx);
     applyWeekTransition(progress, dx);
+  }
+
+  int weekSwipeThreshold() {
+    return Math.max(dp(40), Math.min(dp(120), weekTransitionWidth() / 3));
+  }
+
+  float weekSwipeProgress(float dx) {
+    if (weekTransitionHost == null) return 0f;
+    float signedDistance = weekTransitionDirection == 1 ? -dx : dx;
+    float progress = signedDistance / (float) weekSwipeThreshold();
+    if (weekSwipeVelocity != null) {
+      weekSwipeVelocity.computeCurrentVelocity(1000);
+      float towardVelocity =
+          weekTransitionDirection == 1
+              ? -weekSwipeVelocity.getXVelocity()
+              : weekSwipeVelocity.getXVelocity();
+      // A fast deliberate swipe advances the visual transition slightly farther,
+      // while reverse motion still reduces the distance-based progress.
+      if (towardVelocity > 0f)
+        progress += Math.min(.18f, towardVelocity / (float) dp(5000));
+    }
+    return Math.max(0f, Math.min(1f, progress));
   }
 
   void applyWeekTransition(float progress) {
@@ -580,6 +611,7 @@ public class MainActivity extends Activity {
   void completeWeekTransition(boolean commit) {
     if (weekTransitionHost == null) return;
     View finalRoot = commit ? weekTransitionNext : weekTransitionCurrent;
+    if (commit) selectedWeek = weekTransitionBaseWeek + weekTransitionDirection;
     if (!commit) {
       selectedWeek = weekTransitionBaseWeek;
       activeHomeBodyZoom = weekTransitionCurrentZoom;
@@ -609,7 +641,9 @@ public class MainActivity extends Activity {
     View current = activeHomeRoot;
     ZoomableScheduleLayout currentZoom = activeHomeBodyZoom;
     int baseWeek = selectedWeek - direction;
-    selectedWeek = baseWeek + direction;
+    int targetWeek = selectedWeek;
+    if (baseWeek < 1 || baseWeek > repo.term.weeks || targetWeek < 1 || targetWeek > repo.term.weeks)
+      return;
     View next = buildHomeRoot();
     selectedWeek = baseWeek;
     activeHomeBodyZoom = currentZoom;

@@ -8,7 +8,7 @@
   "targetSdk": 35,
   "apkFile": "weekday-release.apk",
   "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.6/weekday-release.apk",
-  "sha256": "C5926A6DD0AAE1798F32BBED1D6141C97ACA68E6B3EC96076AA33A4AAA28155E",
+  "sha256": "7EAF9AB46AA19EF2F9693211F9C8A6BD87906D67034140B426542F6C82D91B9B",
   "releaseDate": "2026-10-21",
   "releaseNotes": [
     "删除一款内置背景用于更新测试",

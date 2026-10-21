@@ -115,6 +115,7 @@ public class MainActivityTest {
       activity.mountWeekTransition(current, next, currentZoom, 1, 1);
       activity.completeWeekTransition(true);
       assertSame(next, activity.activeHomeRoot);
+      assertEquals(2, activity.selectedWeek);
       assertSame(next, activity.content.getChildAt(0));
       assertSame(activity.content, next.getParent());
     } finally {

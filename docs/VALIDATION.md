@@ -6,7 +6,7 @@
 
 本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，48 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.6`（versionCode 12）。
 
-最终 release APK SHA-256：`7CE4E32E171EB14420CECBB06BC81BC3A74060A6F9B9BFDD9374B0A76B2DC551`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
+最终 release APK SHA-256：`7EAF9AB46AA19EF2F9693211F9C8A6BD87906D67034140B426542F6C82D91B9B`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
 
 课程文字更新：取消课程块固定行数和省略号限制，按列宽持续换行至块底部，保持课程块既有尺寸；字号在设置值基础上减小 1sp，最低 8sp。执行 `tools/build-android.ps1`，打包、Lint 和全部 46 个单元测试通过。尚未在手机上验证此次文字布局。
 
