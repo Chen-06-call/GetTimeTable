@@ -2,11 +2,11 @@
 
 ## 自动检查
 
-当前 1.3.11 测试包已移除“暮色湖畔”内置背景，运行时保留 10 款内置背景；该背景的旧 SVG 仅属于历史归档，不参与 APK。
+当前 1.3.12 测试包已移除“暮色湖畔”内置背景，运行时保留 10 款内置背景；该背景的旧 SVG 仅属于历史归档，不参与 APK。
 
-本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，48 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.11`（versionCode 17）。
+本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，48 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.12`（versionCode 18）。
 
-最终 release APK SHA-256：`D68103113D3F420A6A32C9EBCE409EE95802329A4844F2EA61F750AA0378190E`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
+最终 release APK SHA-256：`98723B5391228DA02F89327A0A6199EBCFA805A8D3145EF2EF5C751DFF968165`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
 
 课程文字更新：取消课程块固定行数和省略号限制，按列宽持续换行至块底部，保持课程块既有尺寸；字号在设置值基础上减小 1sp，最低 8sp。执行 `tools/build-android.ps1`，打包、Lint 和全部 46 个单元测试通过。尚未在手机上验证此次文字布局。
 

@@ -3332,6 +3332,19 @@ public class MainActivity extends Activity {
     }
   }
 
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    // The swipe replaces the original child with a transition host. Keep routing
+    // the active gesture here so the detached child cannot strand the animation.
+    if (weekTransitionHost != null
+        && weekSwipeHorizontal
+        && event.getActionMasked() != MotionEvent.ACTION_DOWN) {
+      handleWeekSwipeTouch(weekTransitionHost, event);
+      return true;
+    }
+    return super.dispatchTouchEvent(event);
+  }
+
   void editExam(Exam source) {
     Exam e = new Exam();
     if (source != null) {
