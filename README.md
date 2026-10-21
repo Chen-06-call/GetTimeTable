@@ -4,7 +4,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 
 ## 安装与第一次使用
 
-当前版本 **1.3.4**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
+当前版本 **1.3.5**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
 
 1. 在手机上打开 APK，按系统提示允许该文件来源安装。
 2. 打开「设置 → 当前课表 → 编辑当前课表」，填写课表名称、开学日期及 1–20 周的总周数。界面会显示开学日期所在周的周一，供确认。
@@ -41,6 +41,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 | 界面与导航 | 底部导航提供课表、课程、考试、教务、翻译和设置六个入口；当前页面使用图标高亮和浅色胶囊背景，按钮提供点击反馈。课表顶部保留左上角和当前周，其他选项由菜单图标展开。翻译页区分主操作、次操作、结果区和网络设置入口。 |
 | 外观 | 晨光、晴空、森林、星夜、山岚、纸页、暮色湖畔，以及春日、夏日、秋色、冬霜四季背景；主题支持跟随系统、浅色和深色。相册图片可拖动裁剪、双指缩放，并复制到本地。支持亮度、模糊、遮罩、课块透明度及文字大小。背景记录见 [docs/backgrounds](docs/backgrounds/README.md)。 |
 | 备份 | 完整 JSON 导出/恢复，包含所有学期、课程、临时调整、作息、学校、外观和自定义背景。每次导入/恢复前保存自动快照，保留最近 8 份。 |
+| 版本更新 | 启动后主动检查 GitHub Releases；发现更高 `versionCode` 时提示更新，下载显示进度并校验 SHA-256，随后交给 Android 系统安装器。设置页也可手动检查。 |
 
 湖北经济学院的自动读取需要用户在 WebView 内自行登录并完成验证码，打开“个人课表”后选择正确学期并点击查询，再点击“一键读取课程”。读取后选择新建课表或导入当前课表。App 只读取网站返回的课程字段，不读取或保存账号密码。其他学校仍提供通用 WebView 和表格导入，自动读取需要后续单独适配。网站 Cookie、缓存不写入课表备份。中英翻译需要网络，点击翻译时将输入内容发往翻译服务，App 不将译文写入课表。Android 的 INTERNET 与 ACCESS_NETWORK_STATE 权限安装时自动授予，不存在运行时申请弹窗；手机厂商的应用联网限制需在系统设置中允许。免费翻译服务可能限流，不保证所有手机网络均可达。桌面组件和云同步暂不在首版内。
 
@@ -85,6 +86,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build-android.ps
 脚本执行 release APK 打包、Android Lint 和全部单元测试，并复制产物到 `dist/weekday-release.apk`。首次执行需要联网下载 Gradle 与依赖；Wrapper 使用腾讯 Gradle 镜像，校验分发包 SHA-256。测试运行库使用 Maven 镜像下载，可在 `app/build.gradle` 中调整 Robolectric 下载地址。
 
 Release 签名密钥保存在本机的 `.android-user/weekday-release.jks`，密码配置保存在被忽略的 `keystore.properties`，两者都不能上传到 GitHub。迁移开发环境或继续发布更新时必须同时备份这两个文件；丢失密钥后无法覆盖更新已安装的 release APK。当前 debug APK 与 release APK 签名不同，首次切换需要卸载旧 debug APK，之后 release 更新可直接覆盖安装。
+
+发布新版本时，请在 GitHub Releases 创建与 `versionName` 相同的标签（例如 `v1.3.5`），并上传 `dist/weekday-release.apk` 和 `dist/version.json` 两个附件。App 优先读取 `https://github.com/Chen-06-call/GetTimeTable/releases/latest/download/version.json`，若 Release 尚未上传清单则回退读取仓库 `main/version.json`。
 
 标准命令也可使用：
 

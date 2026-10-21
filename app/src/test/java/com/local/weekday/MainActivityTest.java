@@ -26,6 +26,21 @@ import org.robolectric.shadows.ShadowAlertDialog;
 @SQLiteMode(SQLiteMode.Mode.LEGACY)
 public class MainActivityTest {
   @Test
+  public void updateManifestComparesVersionAndParsesNotes() throws Exception {
+    JSONObject json =
+        new JSONObject()
+            .put("versionName", "9.1.0")
+            .put("versionCode", 91)
+            .put("downloadUrl", "https://github.com/Chen-06-call/GetTimeTable/releases/download/v9.1.0/weekday-release.apk")
+            .put("sha256", "A".repeat(64))
+            .put("releaseNotes", new JSONArray().put("修复更新问题"));
+    UpdateService.Manifest manifest = new UpdateService.Manifest(json);
+    assertTrue(UpdateService.isNewer(manifest, 10));
+    assertFalse(UpdateService.isNewer(manifest, 91));
+    assertTrue(manifest.notes().contains("修复更新问题"));
+  }
+
+  @Test
   public void nativeHomeRendersAndOpensCourseDetails() throws Exception {
     RuntimeEnvironment.getApplication().deleteDatabase("weekday.db");
     ActivityController<MainActivity> controller =

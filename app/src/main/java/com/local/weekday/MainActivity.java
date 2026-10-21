@@ -61,6 +61,9 @@ public class MainActivity extends Activity {
   View weekTransitionCurrent, weekTransitionNext;
   ZoomableScheduleLayout weekTransitionCurrentZoom;
   int weekTransitionBaseWeek, weekTransitionDirection;
+  boolean updateCheckInFlight, updateCheckedThisSession;
+  boolean updateDownloadCancelled;
+  AlertDialog updateProgressDialog;
 
   @Override
   public void onCreate(Bundle b) {
@@ -121,6 +124,7 @@ public class MainActivity extends Activity {
                     : b.getInt("page", 0);
             allMode = repo.prefs.getBoolean("allMode", false);
             refresh();
+            checkForUpdates(false);
           }
         });
   }
@@ -1140,8 +1144,13 @@ public class MainActivity extends Activity {
     row(data, "导入课程", "CSV / XLSX · 选择新建或当前课表", v -> pickImport());
     row(data, "学校与教务网站", "湖北经济学院 · 登录后读取课表", v -> schoolsDialog());
     row(data, "备份与恢复", "导出本机数据 / 导入快照", v -> backupDialog());
+    row(
+        data,
+        "检查更新",
+        "当前版本 " + currentVersionName() + " · GitHub Releases",
+        v -> checkForUpdates(true));
     LinearLayout looks = section(root, "外观");
-    row(looks, "背景与主题", "11 款内置背景 · 跟随系统/浅色/深色 · 可选相册", v -> appearanceDialog());
+    row(looks, "背景与主题", "10 款内置背景 · 跟随系统/浅色/深色 · 可选相册", v -> appearanceDialog());
     ScrollView sv = new ScrollView(this);
     sv.addView(root);
     content.addView(sv);
@@ -2007,7 +2016,7 @@ public class MainActivity extends Activity {
   void appearanceDialog() {
     LinearLayout root = form();
     String[] names = {
-      "晨光", "晴空", "森林", "星夜", "山岚", "纸页", "春日", "夏日", "秋色", "冬霜", "暮色湖畔",
+      "晨光", "晴空", "森林", "星夜", "山岚", "纸页", "春日", "夏日", "秋色", "冬霜",
       "自定义背景（先从相册选择）"
     };
     Spinner background = new Spinner(this);
@@ -2015,8 +2024,8 @@ public class MainActivity extends Activity {
         new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, names));
     background.setSelection(
         repo.prefs.getBoolean("customBackground", false)
-            ? 11
-            : Math.min(10, repo.prefs.getInt("background", 5)));
+            ? 10
+            : Math.min(9, repo.prefs.getInt("background", 5)));
     root.addView(tv("内置背景", 13, muted));
     root.addView(background);
     String[] themeNames = {"跟随系统", "浅色主题", "深色主题"};
@@ -2043,14 +2052,14 @@ public class MainActivity extends Activity {
             "背景与外观",
             root,
             () -> {
-              if (background.getSelectedItemPosition() == 11
+              if (background.getSelectedItemPosition() == 10
                   && !new File(getFilesDir(), "background.jpg").isFile())
                 throw new Exception("请先从相册选择背景");
               int selectedTheme = theme.getSelectedItemPosition();
               repo.prefs
                   .edit()
-                  .putBoolean("customBackground", background.getSelectedItemPosition() == 11)
-                  .putInt("background", Math.min(10, background.getSelectedItemPosition()))
+                  .putBoolean("customBackground", background.getSelectedItemPosition() == 10)
+                  .putInt("background", Math.min(9, background.getSelectedItemPosition()))
                   .putInt("brightness", bright.getProgress())
                   .putInt("blur", blur.getProgress())
                   .putInt("veil", veil.getProgress())
@@ -3084,6 +3093,154 @@ public class MainActivity extends Activity {
             "打开网络设置",
             (d, which) -> openTranslationNetworkSettings(false))
         .show();
+  }
+
+  void checkForUpdates(boolean manual) {
+    if (updateCheckInFlight || (!manual && updateCheckedThisSession)) return;
+    updateCheckInFlight = true;
+    updateCheckedThisSession = true;
+    UpdateService.check(
+        (manifest, error) ->
+            runOnUiThread(
+                () -> {
+                  updateCheckInFlight = false;
+                  if (isFinishing() || isDestroyed()) return;
+                  if (error != null) {
+                    if (manual) toast("检查更新失败：" + error.getMessage());
+                    return;
+                  }
+                  if (!UpdateService.isNewer(manifest, currentVersionCode())) {
+                    if (manual) toast("当前已是最新版本");
+                    return;
+                  }
+                  showUpdateDialog(manifest);
+                }));
+  }
+
+  void showUpdateDialog(UpdateService.Manifest manifest) {
+    StringBuilder message =
+        new StringBuilder("发现新版本 ")
+            .append(manifest.versionName)
+            .append("（versionCode ")
+            .append(manifest.versionCode)
+            .append("）");
+    if (!manifest.releaseDate.isEmpty()) message.append("\n发布日期：").append(manifest.releaseDate);
+    if (!manifest.notes().isEmpty()) message.append("\n\n更新内容：\n").append(manifest.notes());
+    new AlertDialog.Builder(this)
+        .setTitle("发现新版本")
+        .setMessage(message.toString())
+        .setNegativeButton("稍后", null)
+        .setPositiveButton("下载更新", (d, which) -> downloadUpdate(manifest))
+        .show();
+  }
+
+  void downloadUpdate(UpdateService.Manifest manifest) {
+    updateDownloadCancelled = false;
+    LinearLayout box = vertical();
+    box.setPadding(dp(22), dp(4), dp(22), 0);
+    TextView status = tv("正在连接 GitHub…", 13, muted);
+    ProgressBar progress = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+    progress.setMax(1000);
+    box.addView(status, lp(-1, 36));
+    box.addView(progress, lp(-1, 40));
+    updateProgressDialog =
+        new AlertDialog.Builder(this)
+            .setTitle("下载更新")
+            .setView(box)
+            .setNegativeButton("取消", null)
+            .create();
+    updateProgressDialog.setCanceledOnTouchOutside(false);
+    updateProgressDialog.setOnCancelListener(d -> updateDownloadCancelled = true);
+    updateProgressDialog.show();
+    UpdateService.download(
+        this,
+        manifest,
+        new UpdateService.DownloadCallback() {
+          @Override
+          public void progress(long downloaded, long total) {
+            runOnUiThread(
+                () -> {
+                  if (updateProgressDialog == null || !updateProgressDialog.isShowing()) return;
+                  if (total > 0) {
+                    progress.setProgress((int) Math.min(1000, downloaded * 1000 / total));
+                    status.setText(
+                        "已下载 " + formatBytes(downloaded) + " / " + formatBytes(total));
+                  } else {
+                    status.setText("已下载 " + formatBytes(downloaded));
+                  }
+                });
+          }
+
+          @Override
+          public void complete(File apk, Exception error) {
+            runOnUiThread(
+                () -> {
+                  if (updateProgressDialog != null && updateProgressDialog.isShowing())
+                    updateProgressDialog.dismiss();
+                  updateProgressDialog = null;
+                  if (updateDownloadCancelled) return;
+                  if (isFinishing() || isDestroyed()) return;
+                  if (error != null) {
+                    new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("更新失败")
+                        .setMessage(error.getMessage() == null ? "请稍后重试" : error.getMessage())
+                        .setPositiveButton("关闭", null)
+                        .show();
+                    return;
+                  }
+                  installUpdate(apk);
+                });
+          }
+        });
+  }
+
+  String formatBytes(long bytes) {
+    if (bytes < 1024 * 1024) return Math.max(1, bytes / 1024) + " KB";
+    return String.format(java.util.Locale.US, "%.1f MB", bytes / 1024d / 1024d);
+  }
+
+  void installUpdate(File apk) {
+    if (Build.VERSION.SDK_INT >= 26 && !getPackageManager().canRequestPackageInstalls()) {
+      new AlertDialog.Builder(this)
+          .setTitle("需要安装权限")
+          .setMessage("请允许本应用安装未知来源应用，然后回到这里再次点击检查更新。")
+          .setNegativeButton("取消", null)
+          .setPositiveButton(
+              "打开设置",
+              (d, which) ->
+                  startActivity(
+                      new Intent(
+                          android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                          Uri.parse("package:" + getPackageName()))))
+          .show();
+      return;
+    }
+    Uri uri = Uri.parse("content://" + getPackageName() + ".update-provider/update.apk");
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.setDataAndType(uri, "application/vnd.android.package-archive");
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+    try {
+      startActivity(intent);
+    } catch (Exception e) {
+      toast("无法打开系统安装器：" + e.getMessage());
+    }
+  }
+
+  int currentVersionCode() {
+    try {
+      return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  String currentVersionName() {
+    try {
+      String value = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+      return value == null ? "未知" : value;
+    } catch (Exception e) {
+      return "未知";
+    }
   }
 
   void openTranslationNetworkSettings(boolean appSettings) {
