@@ -4,7 +4,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 
 ## 安装与第一次使用
 
-当前版本 **1.3.5**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
+当前版本 **1.3.6**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
 
 1. 在手机上打开 APK，按系统提示允许该文件来源安装。
 2. 打开「设置 → 当前课表 → 编辑当前课表」，填写课表名称、开学日期及 1–20 周的总周数。界面会显示开学日期所在周的周一，供确认。
@@ -39,7 +39,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 | 考试安排 | 按学期添加考试日期、时间、考场、备注和独立提醒；支持筛选、编辑、删除和时间重叠提示。 |
 | 中英翻译 | 翻译页支持中文 → English、English → 中文，输入内容后在线翻译，可交换方向、清空和复制结果。默认使用 MyMemory，失败时自动尝试 Google；长文本按服务字节限制分段，每次最多 4000 个字符。提供网络检查、网络设置和应用联网设置入口。 |
 | 界面与导航 | 底部导航提供课表、课程、考试、教务、翻译和设置六个入口；当前页面使用图标高亮和浅色胶囊背景，按钮提供点击反馈。课表顶部保留左上角和当前周，其他选项由菜单图标展开。翻译页区分主操作、次操作、结果区和网络设置入口。 |
-| 外观 | 晨光、晴空、森林、星夜、山岚、纸页、暮色湖畔，以及春日、夏日、秋色、冬霜四季背景；主题支持跟随系统、浅色和深色。相册图片可拖动裁剪、双指缩放，并复制到本地。支持亮度、模糊、遮罩、课块透明度及文字大小。背景记录见 [docs/backgrounds](docs/backgrounds/README.md)。 |
+| 外观 | 晨光、晴空、森林、星夜、山岚、纸页，以及春日、夏日、秋色、冬霜四季背景；主题支持跟随系统、浅色和深色。相册图片可拖动裁剪、双指缩放，并复制到本地。支持亮度、模糊、遮罩、课块透明度及文字大小。背景记录见 [docs/backgrounds](docs/backgrounds/README.md)。 |
 | 备份 | 完整 JSON 导出/恢复，包含所有学期、课程、临时调整、作息、学校、外观和自定义背景。每次导入/恢复前保存自动快照，保留最近 8 份。 |
 | 版本更新 | 启动后主动检查 GitHub Releases；发现更高 `versionCode` 时提示更新，下载显示进度并校验 SHA-256，随后交给 Android 系统安装器。设置页也可手动检查。 |
 
@@ -87,7 +87,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build-android.ps
 
 Release 签名密钥保存在本机的 `.android-user/weekday-release.jks`，密码配置保存在被忽略的 `keystore.properties`，两者都不能上传到 GitHub。迁移开发环境或继续发布更新时必须同时备份这两个文件；丢失密钥后无法覆盖更新已安装的 release APK。当前 debug APK 与 release APK 签名不同，首次切换需要卸载旧 debug APK，之后 release 更新可直接覆盖安装。
 
-发布新版本时，请在 GitHub Releases 创建与 `versionName` 相同的标签（例如 `v1.3.5`），并上传 `dist/weekday-release.apk` 和 `dist/version.json` 两个附件。App 优先读取 `https://github.com/Chen-06-call/GetTimeTable/releases/latest/download/version.json`，若 Release 尚未上传清单则回退读取仓库 `main/version.json`。
+发布新版本时，请在 GitHub Releases 创建与 `versionName` 相同的标签（例如 `v1.3.6`），并上传 `dist/weekday-release.apk` 和 `dist/version.json` 两个附件。App 优先读取 `https://github.com/Chen-06-call/GetTimeTable/releases/latest/download/version.json`，若 Release 尚未上传清单则回退读取仓库 `main/version.json`。
 
 标准命令也可使用：
 

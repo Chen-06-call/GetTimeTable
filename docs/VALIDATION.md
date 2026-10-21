@@ -2,7 +2,9 @@
 
 ## 自动检查
 
-本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，48 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.5`（versionCode 11）。
+当前 1.3.6 测试包已移除“暮色湖畔”内置背景，运行时保留 10 款内置背景；该背景的旧 SVG 仅属于历史归档，不参与 APK。
+
+本次 UI 构建执行命令：`tools/build-android.ps1`，包含 `assembleRelease`、`lintRelease` 和 `testDebugUnitTest`。结果：**BUILD SUCCESSFUL，Lint 0 错误、28 条建议，48 个单元测试通过**。APK 已复制到 `dist/weekday-release.apk`。版本为 `1.3.6`（versionCode 12）。
 
 最终 release APK SHA-256：`7CE4E32E171EB14420CECBB06BC81BC3A74060A6F9B9BFDD9374B0A76B2DC551`；`apksigner` 验证 APK v2 签名通过。签名证书 SHA-256 指纹：`16d54522bcd94cd2431b728c8780ec86f01bc56ffa292e6046a5c2f5ecc83bab`。
 
