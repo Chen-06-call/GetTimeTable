@@ -487,9 +487,11 @@ public class MainActivity extends Activity {
     FrameLayout host = new FrameLayout(this);
     host.setClipChildren(false);
     host.setClipToPadding(false);
-    content.removeAllViews();
+    if (current.getParent() == null)
+      content.addView(current, new FrameLayout.LayoutParams(-1, -1));
+    ViewParent nextParent = next.getParent();
+    if (nextParent instanceof ViewGroup) ((ViewGroup) nextParent).removeView(next);
     content.addView(host, new FrameLayout.LayoutParams(-1, -1));
-    host.addView(current, new FrameLayout.LayoutParams(-1, -1));
     host.addView(next, new FrameLayout.LayoutParams(-1, -1));
     weekTransitionHost = host;
     weekTransitionCurrent = current;
@@ -497,7 +499,8 @@ public class MainActivity extends Activity {
     weekTransitionCurrentZoom = currentZoom;
     weekTransitionBaseWeek = baseWeek;
     weekTransitionDirection = direction;
-    activeHomeRoot = host;
+    // Keep the current page attached so Android does not cancel the active touch target.
+    activeHomeRoot = current;
     applyWeekTransition(0f);
   }
 
@@ -629,6 +632,7 @@ public class MainActivity extends Activity {
 
   void completeWeekTransition(boolean commit) {
     if (weekTransitionHost == null) return;
+    FrameLayout host = weekTransitionHost;
     View finalRoot = commit ? weekTransitionNext : weekTransitionCurrent;
     if (commit) selectedWeek = weekTransitionBaseWeek + weekTransitionDirection;
     if (!commit) {
@@ -641,10 +645,15 @@ public class MainActivity extends Activity {
     finalRoot.setScaleX(1f);
     finalRoot.setScaleY(1f);
     finalRoot.setRotationY(0f);
-    ViewParent parent = finalRoot.getParent();
-    if (parent instanceof ViewGroup) ((ViewGroup) parent).removeView(finalRoot);
-    content.removeAllViews();
-    content.addView(finalRoot, new FrameLayout.LayoutParams(-1, -1));
+    ViewParent nextParent = weekTransitionNext.getParent();
+    if (nextParent instanceof ViewGroup) ((ViewGroup) nextParent).removeView(weekTransitionNext);
+    ViewParent hostParent = host.getParent();
+    if (hostParent instanceof ViewGroup) ((ViewGroup) hostParent).removeView(host);
+    if (commit) {
+      ViewParent currentParent = weekTransitionCurrent.getParent();
+      if (currentParent instanceof ViewGroup) ((ViewGroup) currentParent).removeView(weekTransitionCurrent);
+      content.addView(finalRoot, new FrameLayout.LayoutParams(-1, -1));
+    }
     activeHomeRoot = finalRoot;
     weekTransitionHost = null;
     weekTransitionCurrent = null;
@@ -3330,19 +3339,6 @@ public class MainActivity extends Activity {
     } catch (Exception e) {
       toast("请在手机设置中检查本应用的 Wi-Fi 和移动数据访问权限");
     }
-  }
-
-  @Override
-  public boolean dispatchTouchEvent(MotionEvent event) {
-    // The swipe replaces the original child with a transition host. Keep routing
-    // the active gesture here so the detached child cannot strand the animation.
-    if (weekTransitionHost != null
-        && weekSwipeHorizontal
-        && event.getActionMasked() != MotionEvent.ACTION_DOWN) {
-      handleWeekSwipeTouch(weekTransitionHost, event);
-      return true;
-    }
-    return super.dispatchTouchEvent(event);
   }
 
   void editExam(Exam source) {

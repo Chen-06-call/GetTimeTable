@@ -1,17 +1,17 @@
 {
   "appId": "com.local.weekday",
   "name": "一周 · Weekday",
-  "versionName": "1.3.12",
-  "versionCode": 18,
+  "versionName": "1.3.13",
+  "versionCode": 19,
   "releaseChannel": "stable",
   "minSdk": 26,
   "targetSdk": 35,
   "apkFile": "weekday-release.apk",
-  "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.12/weekday-release.apk",
-  "sha256": "98723B5391228DA02F89327A0A6199EBCFA805A8D3145EF2EF5C751DFF968165",
+  "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.13/weekday-release.apk",
+  "sha256": "956D4192756B72D9FC9C387B679881579EE9EE4B711305D5710901E34DDC4D90",
   "releaseDate": "2026-10-21",
   "releaseNotes": [
-    "Keep week swipes alive after the transition view is mounted",
-    "Complete or restore the animation when the finger is released"
+    "Keep the current touch target during week transitions",
+    "Complete or restore the animation reliably on release"
   ]
 }

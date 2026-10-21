@@ -47,7 +47,7 @@ try {
         downloadUrl = "https://github.com/Chen-06-call/GetTimeTable/releases/download/v$versionName/weekday-release.apk"
         sha256 = $apkHash
         releaseDate = (Get-Date -Format 'yyyy-MM-dd')
-        releaseNotes = @('Keep week swipes alive after the transition view is mounted', 'Complete or restore the animation when the finger is released')
+        releaseNotes = @('Keep the current touch target during week transitions', 'Complete or restore the animation reliably on release')
     } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'dist\version.json' -Encoding utf8
     Write-Output 'APK: dist\weekday-release.apk'
     Write-Output 'Version manifest: dist\version.json'
