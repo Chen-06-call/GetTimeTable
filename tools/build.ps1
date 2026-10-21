@@ -47,7 +47,7 @@ try {
         downloadUrl = "https://github.com/Chen-06-call/GetTimeTable/releases/download/v$versionName/weekday-release.apk"
         sha256 = $apkHash
         releaseDate = (Get-Date -Format 'yyyy-MM-dd')
-        releaseNotes = @('Add active GitHub Releases update checks', 'Show download progress and verify the APK before installation')
+        releaseNotes = @('Fix skipped weeks when using week arrows', 'Improve finger-following week transition and reverse-swipe handling')
     } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'dist\version.json' -Encoding utf8
     Write-Output 'APK: dist\weekday-release.apk'
     Write-Output '版本清单：dist\version.json'
