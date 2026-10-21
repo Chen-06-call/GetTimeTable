@@ -4,7 +4,7 @@ Java + XML + Android 原生控件开发的个人课程表，Android 8.0（API 26
 
 ## 安装与第一次使用
 
-当前版本 **1.3.7**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
+当前版本 **1.3.8**，构建后的安装文件为 [dist/weekday-release.apk](dist/weekday-release.apk)，版本清单为 [version.json](version.json)。这是使用固定 release 签名的自用 APK。构建脚本也会在 `dist/version.json` 生成包含 APK SHA-256 和 GitHub Releases 下载地址的发布清单。
 
 1. 在手机上打开 APK，按系统提示允许该文件来源安装。
 2. 打开「设置 → 当前课表 → 编辑当前课表」，填写课表名称、开学日期及 1–20 周的总周数。界面会显示开学日期所在周的周一，供确认。
@@ -87,7 +87,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build-android.ps
 
 Release 签名密钥保存在本机的 `.android-user/weekday-release.jks`，密码配置保存在被忽略的 `keystore.properties`，两者都不能上传到 GitHub。迁移开发环境或继续发布更新时必须同时备份这两个文件；丢失密钥后无法覆盖更新已安装的 release APK。当前 debug APK 与 release APK 签名不同，首次切换需要卸载旧 debug APK，之后 release 更新可直接覆盖安装。
 
-发布新版本时，请在 GitHub Releases 创建与 `versionName` 相同的标签（例如 `v1.3.7`），并上传 `dist/weekday-release.apk` 和 `dist/version.json` 两个附件。App 优先读取 `https://github.com/Chen-06-call/GetTimeTable/releases/latest/download/version.json`，若 Release 尚未上传清单则回退读取仓库 `main/version.json`。
+发布新版本时，请在 GitHub Releases 创建与 `versionName` 相同的标签（例如 `v1.3.8`），并上传 `dist/weekday-release.apk` 和 `dist/version.json` 两个附件。App 优先读取 `https://github.com/Chen-06-call/GetTimeTable/releases/latest/download/version.json`，若 Release 尚未上传清单则回退读取仓库 `main/version.json`。
 
 标准命令也可使用：
 

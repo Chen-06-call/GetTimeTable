@@ -2581,6 +2581,7 @@ public class MainActivity extends Activity {
         lastViewedDate = now;
         refresh();
       }
+      if (!updateCheckInFlight && !updateCheckedThisSession) checkForUpdates(false);
     }
   }
 
@@ -3140,6 +3141,8 @@ public class MainActivity extends Activity {
                   updateCheckInFlight = false;
                   if (isFinishing() || isDestroyed()) return;
                   if (error != null) {
+                    // Allow the next foreground resume to retry after a transient network failure.
+                    updateCheckedThisSession = false;
                     if (manual) toast("检查更新失败：" + error.getMessage());
                     return;
                   }

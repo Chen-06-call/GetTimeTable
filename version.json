@@ -1,17 +1,17 @@
 {
   "appId": "com.local.weekday",
   "name": "一周 · Weekday",
-  "versionName": "1.3.7",
-  "versionCode": 13,
+  "versionName": "1.3.8",
+  "versionCode": 14,
   "releaseChannel": "stable",
   "minSdk": 26,
   "targetSdk": 35,
   "apkFile": "weekday-release.apk",
-  "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.7/weekday-release.apk",
-  "sha256": "36FCB0AC80C7E2DB8CCE8EAAF60FF5A619B62FF7C78A30910CF902882A7019EE",
+  "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.8/weekday-release.apk",
+  "sha256": "42A2973F7F31D180EA9133301C042971E5E2A45B293CA3E37839D2F15D2DCCB3",
   "releaseDate": "2026-10-21",
   "releaseNotes": [
-    "Fix skipped weeks when using week arrows",
-    "Improve finger-following week transition and reverse-swipe handling"
+    "Retry update checks after a temporary network failure",
+    "Fix skipped weeks and improve finger-following week transitions"
   ]
 }
