@@ -430,7 +430,13 @@ public class MainActivity extends Activity {
       weekSwipeHorizontal = true;
       source.getParent().requestDisallowInterceptTouchEvent(true);
       int direction = dx < 0 ? 1 : -1;
-      if (!prepareWeekTransition(direction)) weekSwipeHorizontal = false;
+      if (!prepareWeekTransition(direction)) {
+        weekSwipeHorizontal = false;
+      } else {
+        // Do not make the first move wait for the low-pass filter to warm up.
+        weekSwipeFilteredDx = dx;
+        updateWeekTransition(weekSwipeFilteredDx);
+      }
     }
     if (!weekSwipeHorizontal) return false;
     if (action == MotionEvent.ACTION_MOVE) {
@@ -3156,7 +3162,7 @@ public class MainActivity extends Activity {
                   if (error != null) {
                     // Allow the next foreground resume to retry after a transient network failure.
                     updateCheckedThisSession = false;
-                    if (manual) toast("检查更新失败：" + error.getMessage());
+                    if (manual) showUpdateCheckError(error);
                     return;
                   }
                   if (!UpdateService.isNewer(manifest, currentVersionCode())) {
@@ -3165,6 +3171,25 @@ public class MainActivity extends Activity {
                   }
                   showUpdateDialog(manifest);
                 }));
+  }
+
+  void showUpdateCheckError(Exception error) {
+    String detail = error == null ? "未知错误" : error.getMessage();
+    if (detail == null || detail.trim().isEmpty()) detail = "未知错误";
+    boolean missingManifest = detail.contains("HTTP 404");
+    String message =
+        missingManifest
+            ? detail
+                + "\n\n未找到远程版本清单。请在 GitHub Release 上传 version.json，或确认仓库 main 分支包含 version.json。"
+            : detail
+                + "\n\n请检查网络连接；如果手机厂商限制了应用联网，请在应用设置中允许 Wi-Fi 和移动数据。";
+    new AlertDialog.Builder(this)
+        .setTitle("检查更新失败")
+        .setMessage(message)
+        .setNegativeButton("关闭", null)
+        .setNeutralButton("应用联网设置", (d, which) -> openTranslationNetworkSettings(true))
+        .setPositiveButton("网络设置", (d, which) -> openTranslationNetworkSettings(false))
+        .show();
   }
 
   void showUpdateDialog(UpdateService.Manifest manifest) {

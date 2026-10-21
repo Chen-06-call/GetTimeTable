@@ -1,17 +1,17 @@
 {
   "appId": "com.local.weekday",
   "name": "一周 · Weekday",
-  "versionName": "1.3.9",
-  "versionCode": 15,
+  "versionName": "1.3.11",
+  "versionCode": 17,
   "releaseChannel": "stable",
   "minSdk": 26,
   "targetSdk": 35,
   "apkFile": "weekday-release.apk",
-  "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.9/weekday-release.apk",
-  "sha256": "732B4B0EA6673B3E903324603203E98C405EAEDDB54E1282C2CF8CA52B6A3861",
+  "downloadUrl": "https://github.com/Chen-06-call/GetTimeTable/releases/download/v1.3.11/weekday-release.apk",
+  "sha256": "D68103113D3F420A6A32C9EBCE409EE95802329A4844F2EA61F750AA0378190E",
   "releaseDate": "2026-10-21",
   "releaseNotes": [
-    "Reduce jitter during finger-following week swipes",
-    "Keep week switching responsive while filtering touch noise"
+    "Start week transitions on the first horizontal move",
+    "Keep touch-noise filtering without swallowing short swipes"
   ]
 }

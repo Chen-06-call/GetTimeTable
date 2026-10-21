@@ -74,7 +74,15 @@ public final class UpdateService {
               try {
                 callback.complete(fetch(RAW_MANIFEST_URL), null);
               } catch (Exception fallback) {
-                callback.complete(null, first == null ? fallback : first);
+                String releaseMessage = first == null ? "未知错误" : message(first);
+                String rawMessage = message(fallback);
+                callback.complete(
+                    null,
+                    new IOException(
+                        "GitHub Release 清单："
+                            + releaseMessage
+                            + "；仓库 version.json："
+                            + rawMessage));
               }
             },
             "version-check")
@@ -163,6 +171,11 @@ public final class UpdateService {
         || host.endsWith(".github.com")
         || host.equals("raw.githubusercontent.com")))
       throw new IOException("更新地址不是受支持的 GitHub 地址");
+  }
+
+  static String message(Exception error) {
+    String value = error == null ? "未知错误" : error.getMessage();
+    return value == null || value.trim().isEmpty() ? error.getClass().getSimpleName() : value;
   }
 
   static byte[] readLimited(InputStream input, int limit) throws IOException {
