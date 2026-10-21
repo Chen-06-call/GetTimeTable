@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
   ZoomableScheduleLayout activeHomeBodyZoom;
   ZoomableScheduleLayout lastBuiltHomeBodyZoom;
   float weekSwipeDownX, weekSwipeDownY;
+  float weekSwipeFilteredDx;
   boolean weekSwipeHorizontal, weekSwipeCommitted;
   android.view.VelocityTracker weekSwipeVelocity;
   FrameLayout weekTransitionHost;
@@ -414,6 +415,7 @@ public class MainActivity extends Activity {
       weekSwipeVelocity.addMovement(event);
       weekSwipeDownX = event.getX();
       weekSwipeDownY = event.getY();
+      weekSwipeFilteredDx = 0f;
       weekSwipeHorizontal = false;
       weekSwipeCommitted = false;
       return false;
@@ -432,12 +434,13 @@ public class MainActivity extends Activity {
     }
     if (!weekSwipeHorizontal) return false;
     if (action == MotionEvent.ACTION_MOVE) {
-      updateWeekTransition(dx);
+      updateWeekTransition(smoothWeekSwipe(dx));
       return true;
     }
     if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+      float stableDx = smoothWeekSwipe(dx);
       int threshold = weekSwipeThreshold();
-      float signedDistance = weekTransitionDirection == 1 ? -dx : dx;
+      float signedDistance = weekTransitionDirection == 1 ? -stableDx : stableDx;
       boolean switchWeek = weekTransitionHost != null && signedDistance >= threshold / 2f;
       if (switchWeek && !weekSwipeCommitted && weekTransitionHost != null) {
         weekSwipeCommitted = true;
@@ -501,6 +504,16 @@ public class MainActivity extends Activity {
     if (weekTransitionHost == null) return;
     float progress = weekSwipeProgress(dx);
     applyWeekTransition(progress, dx);
+  }
+
+  /** Removes touch-sample noise without making the page feel detached from the finger. */
+  float smoothWeekSwipe(float rawDx) {
+    float delta = rawDx - weekSwipeFilteredDx;
+    float deadband = dp(2);
+    if (Math.abs(delta) <= deadband) return weekSwipeFilteredDx;
+    float response = Math.min(.65f, Math.max(.35f, Math.abs(delta) / Math.max(1f, dp(48))));
+    weekSwipeFilteredDx += delta * response;
+    return weekSwipeFilteredDx;
   }
 
   int weekSwipeThreshold() {
